@@ -2,6 +2,7 @@ package com.shoppingcenter.market.controller;
 
 import com.shoppingcenter.market.dto.CategoryDto;
 import com.shoppingcenter.market.dto.ItemDto;
+import com.shoppingcenter.market.model.Item;
 import com.shoppingcenter.market.service.ItemService;
 import com.shoppingcenter.market.utils.ItemConversion;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,16 @@ public class ItemController {
     }
 
     @GetMapping("/items")
-    public  ResponseEntity<List<CategoryDto>> getAll(){
-        return  new ResponseEntity<>(itemService.getAll(),HttpStatus.OK);
+    public  ResponseEntity<List<ItemDto>> getAll(){
+       ResponseEntity<List<Item>> items = itemService.getAll();
+
+        return  new ResponseEntity<>(itemConversion.toItemDto(itemService.getAll()),HttpStatus.OK);
         //todo dto teleb edir amma itemdi?
+    }
+
+    @DeleteMapping("/categories/{idItem}")
+    public  ResponseEntity<String> deleteITem(@PathVariable("idItem") int idItem){
+        itemService.deleteItemById(idItem);
+        return new ResponseEntity<>("deleted",HttpStatus.OK);
     }
 }

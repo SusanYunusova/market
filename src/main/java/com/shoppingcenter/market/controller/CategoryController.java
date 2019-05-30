@@ -35,27 +35,23 @@ public class CategoryController {
     }
     @GetMapping("/categories")
     public  ResponseEntity<List<CategoryDto>> getAll(){
-        return  new ResponseEntity<>(categoryService.getAll(),HttpStatus.OK);
-        //todo dto teleb edir amma categorydi?
+
+
+return new ResponseEntity<>(categoryConversion.toListCategoryDto(categoryService.getAll()),HttpStatus.OK);
     }
-//
-//    @GetMapping("/categories/{categoryId}")
-//    public ResponseEntity<CategoryDto> getCategory(){
-//        return null;
-//    }
-//
-//
-//    @DeleteMapping("/categories/{categoryId}")
-//    public ResponseEntity<CategoryDto> deleteCategory(){
-//        return null;
-//
-//    }
-//
-//    @PutMapping("/categories/{categoryId}")
-//    public ResponseEntity<CategoryDto> updateCategory(){
-//        return null;
-//
-//    }
+
+
+    @DeleteMapping("/categories")
+    public  ResponseEntity<String> deleteCategory(@PathVariable("categoryId") int categoryId){
+        categoryService.deleteCategoryById(categoryId);
+        return new ResponseEntity<>("deleted",HttpStatus.OK);
+    }
+
+    @PutMapping("/categories/{categoryId}")
+    public ResponseEntity<CategoryDto> updateCategory(@PathVariable("categoryId") int categoryId,@RequestBody CategoryDto categoryDto){
+        categoryService.updateCategory(categoryId,categoryConversion.toCategory(categoryDto));
+
+    }
 
     /*@PatchMapping("/categories/{categoryId}")
     public ResponseEntity<CategoryDto> patchCategory(){

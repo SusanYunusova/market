@@ -9,10 +9,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryService {
     private CategoryRepository categoryRepository;
+
 
     @Autowired
     public CategoryService(CategoryRepository categoryRepository) {
@@ -23,12 +25,33 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
-    public ResponseEntity<List<Category>> getAll() {
- List<Category> categoryList = categoryRepository.findAll();
-        if (categoryList == null || categoryList.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-        }else {
-            return new ResponseEntity<>(categoryList,HttpStatus.OK);
+    public List<Category> getAll() {
+
+            return categoryRepository.findAll();
         }
+
+
+    public ResponseEntity<String> deleteCategoryById(int categoryId) {
+
+        try {
+            categoryRepository.deleteById(categoryId);
+            return new ResponseEntity<>("Category deleted", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+
+
+    public Category updateCategory(int categoryId, Category category) {
+        Optional<Category>  optionalCategory=  categoryRepository.findById(categoryId);
+        if(optionalCategory.isPresent()){
+            category.setId(categoryId);
+            Category categoryNew = categoryRepository.save(category);
+
+            return categoryNew;
+        }
+        throw new  RuntimeException();
     }
 }

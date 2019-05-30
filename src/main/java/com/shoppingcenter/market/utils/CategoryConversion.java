@@ -4,6 +4,9 @@ import com.shoppingcenter.market.dto.CategoryDto;
 import com.shoppingcenter.market.model.Category;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class CategoryConversion {
 //service modelle ishleyir
@@ -23,6 +26,21 @@ public class CategoryConversion {
         categoryDto.setCategoryId(category.getId());
         categoryDto.setCategoryName(category.getName());
         return categoryDto;
+    }
+
+    public List<CategoryDto> toListCategoryDto(List<Category> categoryList){
+        List<CategoryDto> categoryDtoList = new ArrayList<>();
+        if(categoryList.size()== 0){
+
+            return  categoryDtoList;
+
+        }else {
+            for (Category category : categoryList) {
+              categoryDtoList.add( toCategoryDto(category)) ;
+
+            }
+            return  categoryDtoList;
+        }
     }
 
 }
