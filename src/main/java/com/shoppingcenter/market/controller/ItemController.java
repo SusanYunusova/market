@@ -2,54 +2,41 @@ package com.shoppingcenter.market.controller;
 
 import com.shoppingcenter.market.dto.CategoryDto;
 import com.shoppingcenter.market.dto.ItemDto;
+import com.shoppingcenter.market.service.ItemService;
+import com.shoppingcenter.market.utils.ItemConversion;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
+@RequestMapping("/api/v1/shop")
 public class ItemController {
-//
-//    private ItemService itemService;
-//
-//
-//    @Autowired
-//    public ItemController(ItemService itemService) {
-//        this.itemService=itemService;
-//    }
-//
-//    @PostMapping("/categories/{categoryId}/items")
-//    public ResponseEntity<ItemDto> createNewCategory(
-//            @PathVariable int categoryId,
-//            @RequestBody ItemDto itemDto){
-//        itemService(convert(itemDto));
-//
-//
-//        return null;
-//    }
-//
-//    @GetMapping("/categories")
-//    public ResponseEntity<ItemDto> getCategory(){
-//        return null;
-//    }
-//
-//
-//    @DeleteMapping("/categories")
-//    public ResponseEntity<ItemDto> deleteCategory(){
-//        return null;
-//
-//    }
-//
-//    @PutMapping("/categories")
-//    public ResponseEntity<ItemDto> updateCategory(){
-//        return null;
-//
-//    }
-//    @PatchMapping("/categories")
-//    public ResponseEntity<ItemDto> patchCategory(){
-//        return null;
-//    }
+
+       private ItemService itemService;
+       private ItemConversion itemConversion;
+
+//controller dto ile ishleyir
+//todo convertItem yaz
+    @Autowired
+    public ItemController(ItemService itemService, ItemConversion itemConversion) {
+        this.itemService = itemService;
+        this.itemConversion = itemConversion;
+    }
+
+    @PostMapping("/categories/{categoryId}/items")
+    public ResponseEntity<ItemDto> createNewItem(@PathVariable int categoryId, @RequestBody ItemDto itemDto){
 
 
+        return new ResponseEntity<>(itemConversion.toItemDto(itemService.
+                saveItem(itemConversion.toItem(itemDto))), HttpStatus.CREATED);
+    }
 
-
+    @GetMapping("/items")
+    public  ResponseEntity<List<CategoryDto>> getAll(){
+        return  new ResponseEntity<>(itemService.getAll(),HttpStatus.OK);
+        //todo dto teleb edir amma itemdi?
+    }
 }

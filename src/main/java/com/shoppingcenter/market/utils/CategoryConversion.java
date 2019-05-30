@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CategoryConversion {
+//service modelle ishleyir
+
+
 
     public Category toCategory(CategoryDto categoryDto){
         Category category=new Category();
